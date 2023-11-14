@@ -62,11 +62,7 @@ username = st.text_input('Enter Username')
 password = st.text_input('Enter Password',type='password')
 database = st.text_input('Enter Database')
 if st.button('Connect'):
-  conn = psycopg2.connect(
-      host=host,
-      database=database,
-      user=username,
-      password=password)
+    conn = psycopg2.connect(host=host,database=database,user=username,password=password)
     st.write("Connected Successfully")
     st.header('Execute SQL in Database')
     sql_code = st.text_areaa('Enter SQL code to execute')
