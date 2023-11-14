@@ -7,7 +7,7 @@ import json
 
 def get_desc_stats(df):
     json_data = df.head(100)
-    api_key = "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"
+    api_key = st.secrets["api_key"]
     payload = {
       "model": "gpt-3.5-turbo",
       "messages": [
@@ -29,7 +29,7 @@ def get_desc_stats(df):
     
 def get_trend_stats(df):
     json_data = df.head(100)
-    api_key = "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"
+    api_key = st.secrets["api_key"]
     payload = {
       "model": "gpt-3.5-turbo",
       "messages": [
