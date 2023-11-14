@@ -30,7 +30,8 @@ uploaded_json_file = st.file_uploader('Upload JSON Data Transformation Files')
 if uploaded_file != None:
   df = pd.read_parquet(uploaded_file, engine='pyarrow')
   if st.button('Create Table From Uploaded Data'):
-    sql_code = pd.io.sql.get_schema(df.reset_index(), 'data')
+    table_name = st.text_input('Table Name')
+    sql_code = pd.io.sql.get_schema(df.reset_index(), table_name)
     cur = conn.cursor()
     cur.execute(sql_code)
     conn.commit()
@@ -56,7 +57,8 @@ if st.button('Transform Data'):
       df_new[col_name] = eval(eval_str)
   st.write(df_new)
   if st.button('Create Table From Transformed Data'):
-    sql_code = pd.io.sql.get_schema(df_new.reset_index(), 'data')
+    table_name = st.text_input('Table Name')
+    sql_code = pd.io.sql.get_schema(df_new.reset_index(), table_name)
     cur = conn.cursor()
     cur.execute(sql_code)
     conn.commit()
