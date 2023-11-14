@@ -6,7 +6,7 @@ import requests
 import json
 
 def get_desc_stats(df):
-    json_data = df.head(100)
+    json_data = df.head(100).to_dict(orient="records")
     api_key = st.secrets["api_key"]
     payload = {
       "model": "gpt-3.5-turbo",
@@ -28,7 +28,7 @@ def get_desc_stats(df):
     return response.json()['choices'][0]['message']['content']
     
 def get_trend_stats(df):
-    json_data = df.head(100)
+    json_data = df.head(100).to_dict(orient="records")
     api_key = st.secrets["api_key"]
     payload = {
       "model": "gpt-3.5-turbo",
