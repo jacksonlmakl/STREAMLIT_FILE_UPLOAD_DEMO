@@ -2,7 +2,53 @@ import pandas as pd
 import streamlit as st
 import json
 import psycopg2
+import requests
+import json
 
+def get_desc_stats(df):
+    json_data = df.head(100)
+    api_key = "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"
+    payload = {
+      "model": "gpt-3.5-turbo",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You will be given data in JSON, you must return descriptive analytics on the data provided"
+        },
+        {
+          "role": "user",
+          "content": json.dumps(json_data)
+        }
+      ],
+      "temperature": 0,
+      "max_tokens": 256
+        }
+    headers = {"Authorization": f"Bearer {api_key}"}
+    response = requests.post(url = "https://api.openai.com/v1/chat/completions", json = payload ,headers = headers)
+    return response.json()['choices'][0]['message']['content']
+    
+def get_trend_stats(df):
+    json_data = df.head(100)
+    api_key = "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"
+    payload = {
+      "model": "gpt-3.5-turbo",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You will be given data in JSON, you must return a trend analysis on the data provided"
+        },
+        {
+          "role": "user",
+          "content": json.dumps(json_data)
+        }
+      ],
+      "temperature": 0,
+      "max_tokens": 256
+        }
+    headers = {"Authorization": f"Bearer {api_key}"}
+    response = requests.post(url = "https://api.openai.com/v1/chat/completions", json = payload ,headers = headers)
+    return response.json()['choices'][0]['message']['content']  
+ 
 def insert_statement(SOURCE, TARGET):
     sql_texts = []
     for index, row in SOURCE.iterrows():       
@@ -38,7 +84,13 @@ uploaded_json_file = st.file_uploader('Upload JSON Data Transformation Files')
 if uploaded_file != None:
     df = pd.read_parquet(uploaded_file, engine='pyarrow')
     st.write(df)
-    
+    if st.button('Get Automated Descriptive Stats'):
+        resp = get_desc_stats(df)
+        st.write(resp)
+    if st.button('Get Automated Trend Analysis'):
+        resp = get_desc_stats(df)
+        st.write(resp)
+        
     if st.button('Create Table From Uploaded Data'):
         table_name = st.text_input('Table Name')
         if st.button('Execute'):
@@ -78,6 +130,13 @@ if st.button('Transform Data'):
         eval_str = f"df_new['{col_name}'].{pd_method}({pd_method_value})"
         df_new[col_name] = eval(eval_str)
     st.write(df_new)
+
+    st.download_button(
+      label="Download Transformed Data as CSV",
+      data=convert_df_to_csv(my_large_df),
+      file_name='large_df.csv',
+      mime='text/csv',
+    )
     
     if st.button('Create Table From Transformed Table'):
         table_name = st.text_input('Table Name')
