@@ -132,6 +132,7 @@ if st.button('Transform Data'):
     st.write(df_new)
 
     st.download_button(
+      key = "download_csv",
       label="Download Transformed Data as CSV",
       data=convert_df_to_csv(df_new),
       file_name='large_df.csv',
