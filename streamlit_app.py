@@ -2,14 +2,6 @@ import pandas as pd
 import streamlit as st
 import json
 import psycopg2
-st.header('Upload Data Files')
-uploaded_file = st.file_uploader('Upload a Parquet File')
-uploaded_json_file = st.file_uploader('Upload JSON Data Transformation Files')
-if uploaded_file != None:
-  df = pd.read_parquet(uploaded_file, engine='pyarrow')
-  st.write(df)
-if uploaded_json_file != None:
-  json_file = json.load(uploaded_json_file)
 st.header('Connect Postgres Database')
 host = st.text_input('Enter Host')
 username = st.text_input('Enter Username')
@@ -21,6 +13,15 @@ if st.button('Connect'):
       database=database,
       user=username,
       password=password)
+  
+st.header('Upload Data Files')
+uploaded_file = st.file_uploader('Upload a Parquet File')
+uploaded_json_file = st.file_uploader('Upload JSON Data Transformation Files')
+if uploaded_file != None:
+  df = pd.read_parquet(uploaded_file, engine='pyarrow')
+  st.write(df)
+if uploaded_json_file != None:
+  json_file = json.load(uploaded_json_file)
   
 if st.button('Transform Data'):
   df_new = df
