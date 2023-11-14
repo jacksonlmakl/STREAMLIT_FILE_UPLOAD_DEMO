@@ -12,6 +12,7 @@ def convert_df_to_csv(df):
 def get_desc_stats(df):
     json_data = df.head(100).to_dict(orient="records")
     api_key = st.secrets["api_key"]
+    st.write(api_key)
     payload = {
       "model": "gpt-3.5-turbo",
       "messages": [
@@ -29,6 +30,7 @@ def get_desc_stats(df):
         }
     headers = {"Authorization": f"Bearer {api_key}"}
     response = requests.post(url = "https://api.openai.com/v1/chat/completions", json = payload ,headers = headers)
+    st.write(response)
     return response.json()['choices'][0]['message']['content']
     
 def get_trend_stats(df):
