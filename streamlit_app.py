@@ -69,7 +69,7 @@ if st.button('Connect'):
   
     if st.button('Execute'):
         cur = conn.cursor()
-        cur.execute(code)
+        cur.execute(sql_code)
         conn.commit()
         cur.close()
   
