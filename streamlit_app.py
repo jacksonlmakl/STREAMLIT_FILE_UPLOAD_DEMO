@@ -29,6 +29,12 @@ uploaded_file = st.file_uploader('Upload a Parquet File')
 uploaded_json_file = st.file_uploader('Upload JSON Data Transformation Files')
 if uploaded_file != None:
   df = pd.read_parquet(uploaded_file, engine='pyarrow')
+  if st.button('Create Table From Uploaded Data'):
+    sql_code = pd.io.sql.get_schema(df.reset_index(), 'data')
+    cur = conn.cursor()
+    cur.execute(sql_code)
+    conn.commit()
+    cur.close()
   st.write(df)
 if uploaded_json_file != None:
   json_file = json.load(uploaded_json_file)
@@ -49,4 +55,11 @@ if st.button('Transform Data'):
       eval_str = f"df_new['{col_name}'].{pd_method}({pd_method_value})"
       df_new[col_name] = eval(eval_str)
   st.write(df_new)
+  if st.button('Create Table From Transformed Data'):
+    sql_code = pd.io.sql.get_schema(df_new.reset_index(), 'data')
+    cur = conn.cursor()
+    cur.execute(sql_code)
+    conn.commit()
+    cur.close()
+    
   
