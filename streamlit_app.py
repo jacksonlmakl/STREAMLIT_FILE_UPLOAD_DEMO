@@ -5,6 +5,10 @@ import psycopg2
 import requests
 import json
 
+def convert_df_to_csv(df):
+  # IMPORTANT: Cache the conversion to prevent computation on every rerun
+  return df.to_csv().encode('utf-8')
+    
 def get_desc_stats(df):
     json_data = df.head(100).to_dict(orient="records")
     api_key = st.secrets["api_key"]
