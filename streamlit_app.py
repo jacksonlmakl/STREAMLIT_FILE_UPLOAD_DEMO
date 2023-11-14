@@ -9,4 +9,4 @@ if uploaded_file != None:
   st.write(df)
 if uploaded_json_file != None:
   json_file = json.load(uploaded_json_file)
-  st.write(str(json_file))
+  st.write(str(json_file['Card Number']))
