@@ -67,15 +67,15 @@ if st.button('Connect'):
       database=database,
       user=username,
       password=password)
-  st.write("Connected Successfully")
-  sql_code = st.text_areaa('Enter SQL code to execute')
-  st.code(body = sql_code,language="sql")
-  st.header('Execute SQL in Database')
-  if st.button('Execute'):
-    cur = conn.cursor()
-    cur.execute(code)
-    conn.commit()
-    cur.close()
+    st.write("Connected Successfully")
+    st.header('Execute SQL in Database')
+    sql_code = st.text_areaa('Enter SQL code to execute')
+  
+    if st.button('Execute'):
+        cur = conn.cursor()
+        cur.execute(code)
+        conn.commit()
+        cur.close()
   
 
 st.header('Upload Data Files')
