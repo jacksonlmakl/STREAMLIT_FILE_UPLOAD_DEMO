@@ -9,4 +9,21 @@ if uploaded_file != None:
   st.write(df)
 if uploaded_json_file != None:
   json_file = json.load(uploaded_json_file)
-  st.write(str(json_file['Card Number']))
+  
+if st.button('Transform Data'):
+  df_new = df
+  transform_cols = list(json_file.keys())
+  transformations = []
+  for i in transform_cols:
+      actions = list(json_file[i].keys())
+      for action_name in actions:
+          action = json_file[i][action_name]
+          transformations.append((i,action_name,action))
+  for transformation in transformations:
+      col_name = transformation[0]
+      pd_method = transformation[1]
+      pd_method_value = transformation[2]
+      eval_str = f"df_new['{col_name}'].{pd_method}({pd_method_value})"
+      df_new[col_name] = eval(eval_str)
+  st.write(df_new)
+  
