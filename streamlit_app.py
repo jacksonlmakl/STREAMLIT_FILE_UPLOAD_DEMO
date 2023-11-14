@@ -14,7 +14,7 @@ if st.button('Connect'):
       user=username,
       password=password)
   st.write("Connected Successfully")
-  st.code(language='sql')
+  st.code(language="python")
   st.header('Execute SQL in Database')
   if st.button('Execute'):
     cur = conn.cursor()
