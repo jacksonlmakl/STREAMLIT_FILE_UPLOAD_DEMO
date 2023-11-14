@@ -2,6 +2,14 @@ import pandas as pd
 import streamlit as st
 import json
 import psycopg2
+
+def insert_statement(SOURCE, TARGET):
+    sql_texts = []
+    for index, row in SOURCE.iterrows():       
+        sql_texts.append('INSERT INTO '+TARGET+' ('+ str(', '.join(SOURCE.columns))+ ') VALUES '+ str(tuple(row.values)))        
+    return sql_texts
+
+
 st.header('Connect Postgres Database')
 host = st.text_input('Enter Host')
 username = st.text_input('Enter Username')
@@ -37,6 +45,14 @@ if uploaded_file != None:
     conn.commit()
     cur.close()
   st.write(df)
+  if st.button('Insert Data From Uploaded Table Into Existing SQL table '):
+    table_name = st.text_input('Table Name')
+    sql_codes = insert_statement(df_new, table_name)
+    for sql_code in sql_codes
+      cur = conn.cursor()
+      cur.execute(sql_code)
+      conn.commit()
+      cur.close()
 if uploaded_json_file != None:
   json_file = json.load(uploaded_json_file)
   
@@ -56,12 +72,20 @@ if st.button('Transform Data'):
       eval_str = f"df_new['{col_name}'].{pd_method}({pd_method_value})"
       df_new[col_name] = eval(eval_str)
   st.write(df_new)
-  if st.button('Create Table From Transformed Data'):
+  if st.button('Create Table From Transformed Table'):
     table_name = st.text_input('Table Name')
     sql_code = pd.io.sql.get_schema(df_new.reset_index(), table_name)
     cur = conn.cursor()
     cur.execute(sql_code)
     conn.commit()
     cur.close()
+  if st.button('Insert Data From Transformed Table Into Existing SQL table '):
+    table_name = st.text_input('Table Name')
+    sql_codes = insert_statement(df_new, table_name)
+    for sql_code in sql_codes
+      cur = conn.cursor()
+      cur.execute(sql_code)
+      conn.commit()
+      cur.close()
     
   
