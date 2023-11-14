@@ -5,7 +5,7 @@ import psycopg2
 st.header('Connect Postgres Database')
 host = st.text_input('Enter Host')
 username = st.text_input('Enter Username')
-password = st.text_input('Enter Password')
+password = st.text_input('Enter Password',type='password')
 database = st.text_input('Enter Database')
 if st.button('Connect'):
   conn = psycopg2.connect(
@@ -13,6 +13,7 @@ if st.button('Connect'):
       database=database,
       user=username,
       password=password)
+  st.write("Connected Successfully")
   
 st.header('Upload Data Files')
 uploaded_file = st.file_uploader('Upload a Parquet File')
