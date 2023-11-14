@@ -14,7 +14,15 @@ if st.button('Connect'):
       user=username,
       password=password)
   st.write("Connected Successfully")
+  st.code(language='sql')
+  st.header('Execute SQL in Database')
+  if st.button('Execute'):
+    cur = conn.cursor()
+    cur.execute(code)
+    conn.commit()
+    cur.close()
   
+
 st.header('Upload Data Files')
 uploaded_file = st.file_uploader('Upload a Parquet File')
 uploaded_json_file = st.file_uploader('Upload JSON Data Transformation Files')
