@@ -8,5 +8,5 @@ if uploaded_file != None:
   df = pd.read_parquet(uploaded_file, engine='pyarrow')
   st.write(df)
 if uploaded_json_file != None:
-  json_file = json.load(uploaded_json_file.name)
+  json_file = json.load(uploaded_json_file.getbuffer())
   st.write(str(json_file))
